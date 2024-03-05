@@ -6,7 +6,7 @@ import {
 	loadPartFour,
 	loadPartFive,
 	loadConclusion,
-} from "./tutorialContent";
+} from "../content/tutorialContent";
 
 const tutorialParts = [
 	loadIntro,
@@ -17,10 +17,10 @@ const tutorialParts = [
 	loadPartFive,
 	loadConclusion,
 ];
-let currentIndex = 0;
+let currentPartIndex = 0;
 
 export const loadCurrentPart = () => {
-	tutorialParts[currentIndex]();
+	tutorialParts[currentPartIndex]();
 	updateButtonStates();
 };
 
@@ -32,21 +32,21 @@ const updateButtonStates = () => {
 		"next"
 	) as HTMLButtonElement | null;
 
-	if (prevButton) prevButton.disabled = currentIndex === 0;
+	if (prevButton) prevButton.disabled = currentPartIndex === 0;
 	if (nextButton)
-		nextButton.disabled = currentIndex === tutorialParts.length - 1;
+		nextButton.disabled = currentPartIndex === tutorialParts.length - 1;
 };
 
 export const goToNext = () => {
-	if (currentIndex < tutorialParts.length - 1) {
-		currentIndex++;
+	if (currentPartIndex < tutorialParts.length - 1) {
+		currentPartIndex++;
 		loadCurrentPart();
 	}
 };
 
 export const goToPrev = () => {
-	if (currentIndex > 0) {
-		currentIndex--;
+	if (currentPartIndex > 0) {
+		currentPartIndex--;
 		loadCurrentPart();
 	}
 };

@@ -1,18 +1,15 @@
-import "./style.css";
-import { goToPrev, goToNext } from "./tutorialManager";
+import "../style.css";
+import { goToPrev, goToNext } from "../managers/tutorialManager";
 
-export const loadPartFour = () => {
+export const loadIntro = () => {
 	document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     <div class="grid h-screen place-items-center container">
-        <h1>SDLC Tutorial: Part 4 - </h1>
+        <h1>Ready to learn how software gets made?</h1>
         <p>
         Lorum ipsum dolor et
         </p>
         <div class="inline-flex">
-        <button id="prev" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l">
-            Prev
-        </button>
-        <button id="next" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r">
+        <button id="next" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
             Next
         </button>
         </div>

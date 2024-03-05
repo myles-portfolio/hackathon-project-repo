@@ -91,14 +91,30 @@
 	text-align: center;
 }
 
-#header {
-	width: 100%;
-	background-color: #213547;
-}
-
 h1 {
 	font-size: 3em;
 	font-weight: 600;
+}
+
+h2 {
+	font-size: 2em;
+	font-weight: 600;
+	color: #005e7c;
+}
+
+h3 {
+	font-size: 1.5em;
+	font-weight: 600;
+	color: #005e7c;
+}
+
+ul > li > ul {
+	padding-left: 40px;
+	list-style-type: circle;
+}
+
+ul > li > ul > li:first-of-type {
+	margin-top: 10px;
 }
 
 @media (prefers-color-scheme: light) {
@@ -112,4 +128,9 @@ h1 {
 	button {
 		background-color: #f9f9f9;
 	}
+}
+
+#welcome {
+	transition: opacity 0.2s ease-in-out;
+	opacity: 1;
 }

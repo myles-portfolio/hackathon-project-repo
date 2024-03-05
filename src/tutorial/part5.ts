@@ -1,10 +1,10 @@
-import "./style.css";
-import { goToPrev, goToNext } from "./tutorialManager";
+import "../style.css";
+import { goToPrev, goToNext } from "../managers/tutorialManager";
 
-export const loadPartThree = () => {
+export const loadPartFive = () => {
 	document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     <div class="grid h-screen place-items-center container">
-        <h1>SDLC Tutorial: Part 3 - </h1>
+        <h1>SDLC Tutorial: Part 5 - </h1>
         <p>
         Lorum ipsum dolor et
         </p>
