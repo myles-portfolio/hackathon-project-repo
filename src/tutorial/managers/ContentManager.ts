@@ -1,19 +1,45 @@
-interface ContentItem {
+export interface ContentItem {
 	content: string;
 }
 
 export class ContentManager {
+	static goToPrevContent(): any {
+		throw new Error("Method not implemented.");
+	}
+	static goToNextContent(): any {
+		throw new Error("Method not implemented.");
+	}
 	private contentItems: ContentItem[];
 	private currentIndex: number = 0;
 	private contentElementId: string;
+	private shouldTutNavShow: boolean;
 
-	constructor(contentItems: ContentItem[], contentElementId: string) {
+	constructor(
+		contentItems: ContentItem[],
+		contentElementId: string,
+		shouldTutNavShow: boolean
+	) {
 		this.contentItems = contentItems;
 		this.contentElementId = contentElementId;
+		this.shouldTutNavShow = shouldTutNavShow;
 		this.renderCurrentContent();
 	}
 
-	goToNextContent(): void {
+	public renderCurrentContent(): void {
+		const contentElement = document.getElementById(this.contentElementId);
+
+		if (contentElement) {
+			contentElement.innerHTML = this.contentItems[this.currentIndex].content;
+			this.updateContentVisibility(
+				"backward",
+				"forward",
+				"cta-button",
+				"tut-nav"
+			);
+		}
+	}
+
+	public goToNextContent(): void {
 		if (this.currentIndex < this.contentItems.length - 1) {
 			this.fadeContent(() => {
 				this.currentIndex++;
@@ -22,7 +48,7 @@ export class ContentManager {
 		}
 	}
 
-	goToPrevContent(): void {
+	public goToPrevContent(): void {
 		if (this.currentIndex > 0) {
 			this.fadeContent(() => {
 				this.currentIndex--;
@@ -42,22 +68,16 @@ export class ContentManager {
 		}
 	}
 
-	private renderCurrentContent(): void {
-		const contentElement = document.getElementById(this.contentElementId);
-		if (contentElement) {
-			contentElement.innerHTML = this.contentItems[this.currentIndex].content;
-			this.updateContentVisibility("backward", "forward", "cta-button");
-		}
-	}
-
 	public updateContentVisibility(
 		backwardElementId: string,
 		forwardElementId: string,
-		ctaButtonId: string
+		ctaButtonId: string,
+		tutNavId: string
 	): void {
 		const backwardElement = document.getElementById(backwardElementId);
 		const forwardElement = document.getElementById(forwardElementId);
 		const ctaButton = document.getElementById(ctaButtonId);
+		const tutNav = document.getElementById(tutNavId);
 
 		if (backwardElement) {
 			backwardElement.style.display = this.currentIndex > 0 ? "block" : "none";
@@ -71,6 +91,10 @@ export class ContentManager {
 		if (ctaButton) {
 			ctaButton.style.display =
 				this.currentIndex === this.contentItems.length - 1 ? "block" : "none";
+		}
+
+		if (tutNav) {
+			tutNav.style.display = this.shouldTutNavShow ? "flex" : "none";
 		}
 	}
 }
