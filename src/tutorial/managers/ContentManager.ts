@@ -28,15 +28,15 @@ export class ContentManager {
 	public renderCurrentContent(): void {
 		const contentElement = document.getElementById(this.contentElementId);
 
-		if (contentElement) {
+		if (contentElement && this.contentItems.length > 0) {
 			contentElement.innerHTML = this.contentItems[this.currentIndex].content;
-			this.updateContentVisibility(
-				"backward",
-				"forward",
-				"cta-button",
-				"tut-nav"
-			);
 		}
+		this.updateContentVisibility(
+			"backward",
+			"forward",
+			"cta-button",
+			"tut-nav"
+		);
 	}
 
 	public goToNextContent(): void {

@@ -59,51 +59,36 @@ export function setupTutorialPart(
         </div>
     `;
 
-	function setupEventListeners() {
-		document
-			.getElementById("backward")
-			?.addEventListener("click", () => contentManager?.goToPrevContent());
-		document
-			.getElementById("forward")
-			?.addEventListener("click", () => contentManager?.goToNextContent());
-		document
-			.getElementById("cta-button")
-			?.addEventListener("click", () => tutorialManager.loadNext());
+	// Call renderCurrentContent to display the initial content.
+	contentManager.renderCurrentContent();
 
-		document
-			.getElementById("next")
-			?.addEventListener("click", () => tutorialManager.loadNext());
-		document
-			.getElementById("prev")
-			?.addEventListener("click", () => tutorialManager.loadPrev());
-	}
-
-	setupEventListeners();
+	// Setup event listeners after ensuring the page structure is in place.
+	setupEventListeners(contentManager, tutorialManager);
 }
 
-function displayInitialContent(
-	contentId: string,
-	contentArray: ContentItem[],
-	contentClass: string
+function setupEventListeners(
+	contentManager: ContentManager,
+	tutorialManager: TutorialManager
 ) {
-	const targetElement = document.getElementById("welcome");
-	console.log("Target element:", targetElement); // Debugging line
-	if (targetElement && contentArray.length > 0) {
-		targetElement.className = contentClass;
-		targetElement.innerHTML = contentArray[0].content;
-		console.log(
-			"Setting content for:",
-			contentId,
-			"with:",
-			contentArray[0].content
-		); // Debugging line
-	} else {
-		console.error("Element not found or contentArray is empty");
-	}
+	document
+		.getElementById("backward")
+		?.addEventListener("click", () => contentManager?.goToPrevContent());
+	document
+		.getElementById("forward")
+		?.addEventListener("click", () => contentManager?.goToNextContent());
+	document
+		.getElementById("cta-button")
+		?.addEventListener("click", () => tutorialManager.loadNext());
+
+	document
+		.getElementById("next")
+		?.addEventListener("click", () => tutorialManager.loadNext());
+	document
+		.getElementById("prev")
+		?.addEventListener("click", () => tutorialManager.loadPrev());
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-	displayInitialContent("welcome", welcomeContent, "text-justify");
 	setupTutorialPart(
 		"welcome",
 		welcomeContent,
