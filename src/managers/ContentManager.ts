@@ -57,6 +57,16 @@ export class ContentManager {
 		}
 	}
 
+	public updateContent(newContent: ContentItem[]): void {
+		this.contentItems = newContent;
+		this.currentIndex = 0;
+		this.renderCurrentContent();
+	}
+
+	public isLastContent(): boolean {
+		return this.currentIndex === this.contentItems.length - 1;
+	}
+
 	private fadeContent(updateFunction: () => void): void {
 		const contentElement = document.getElementById(this.contentElementId);
 		if (contentElement) {
@@ -94,7 +104,10 @@ export class ContentManager {
 		}
 
 		if (tutNav) {
-			tutNav.style.display = this.shouldTutNavShow ? "flex" : "none";
+			const isAtLastContent =
+				this.currentIndex === this.contentItems.length - 1;
+			tutNav.style.display =
+				this.shouldTutNavShow && isAtLastContent ? "flex" : "none";
 		}
 	}
 }

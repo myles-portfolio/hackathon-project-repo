@@ -1,4 +1,4 @@
-import { ContentItem } from "../../types";
+import { ContentItem } from "./ContentManager";
 
 export interface TutorialPart {
 	id: string;
@@ -9,35 +9,26 @@ export interface TutorialPart {
 }
 
 export class TutorialManager {
-	static loadNext(): any {
-		throw new Error("Method not implemented.");
-	}
-	static loadPrev(): any {
-		throw new Error("Method not implemented.");
-	}
-	static getCurrentPart() {
-		throw new Error("Method not implemented.");
-	}
 	private currentPartIndex: number = 0;
-	private tutorialPart: TutorialPart[];
+	private tutorialParts: TutorialPart[];
 
 	constructor(tutorialPart: TutorialPart[]) {
-		this.tutorialPart = tutorialPart;
+		this.tutorialParts = tutorialPart;
 	}
 
 	public getCurrentPart(): TutorialPart {
-		return this.tutorialPart[this.currentPartIndex];
+		return this.tutorialParts[this.currentPartIndex];
 	}
 
-	public loadTutorialPart() {
-		if (this.currentPartIndex < this.tutorialPart.length - 1) {
+	public async loadTutorialPart() {
+		if (this.currentPartIndex < this.tutorialParts.length - 1) {
 			this.currentPartIndex++;
 			this.updateButtonStates();
 		}
 	}
 
 	public loadNext() {
-		if (this.currentPartIndex < this.tutorialPart.length - 1) {
+		if (this.currentPartIndex < this.tutorialParts.length - 1) {
 			this.currentPartIndex++;
 			this.loadTutorialPart();
 			this.updateButtonStates();
@@ -52,6 +43,13 @@ export class TutorialManager {
 		}
 	}
 
+	public async loadSpecific(index: number) {
+		if (index >= 0 && index < this.tutorialParts.length) {
+			this.currentPartIndex = index;
+			await this.loadTutorialPart();
+		}
+	}
+
 	private updateButtonStates() {
 		const prevButton = document.getElementById(
 			"prev"
@@ -63,6 +61,6 @@ export class TutorialManager {
 		if (prevButton) prevButton.disabled = this.currentPartIndex === 0;
 		if (nextButton)
 			nextButton.disabled =
-				this.currentPartIndex === this.tutorialPart.length - 1;
+				this.currentPartIndex === this.tutorialParts.length - 1;
 	}
 }

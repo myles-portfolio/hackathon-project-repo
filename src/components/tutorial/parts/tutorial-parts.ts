@@ -1,6 +1,6 @@
 import { introContent } from "../content/introContent";
 import { welcomeContent } from "../content/welcomeContent";
-import { TutorialPart } from "../managers/TutorialManager";
+import { TutorialPart } from "../../../managers/TutorialManager";
 
 export const tutorialParts: TutorialPart[] = [
 	{
