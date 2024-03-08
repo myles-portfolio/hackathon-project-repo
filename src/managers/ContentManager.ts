@@ -1,14 +1,6 @@
-export interface ContentItem {
-	content: string;
-}
+import { ContentItem } from "../components/tutorial/parts/tutorial-parts";
 
 export class ContentManager {
-	static goToPrevContent(): any {
-		throw new Error("Method not implemented.");
-	}
-	static goToNextContent(): any {
-		throw new Error("Method not implemented.");
-	}
 	private contentItems: ContentItem[];
 	private currentIndex: number = 0;
 	private contentElementId: string;
@@ -31,12 +23,8 @@ export class ContentManager {
 		if (contentElement && this.contentItems.length > 0) {
 			contentElement.innerHTML = this.contentItems[this.currentIndex].content;
 		}
-		this.updateContentVisibility(
-			"backward",
-			"forward",
-			"cta-button",
-			"tut-nav"
-		);
+		this.updateContentNavigationVisibility("backward", "forward", "cta-button");
+		this.updatePartNavigationVisibility("tut-nav");
 	}
 
 	public goToNextContent(): void {
@@ -57,6 +45,16 @@ export class ContentManager {
 		}
 	}
 
+	public updateContent(newContent: ContentItem[]): void {
+		this.contentItems = newContent;
+		this.currentIndex = 0;
+		this.renderCurrentContent();
+	}
+
+	public isLastContent(): boolean {
+		return this.currentIndex === this.contentItems.length - 1;
+	}
+
 	private fadeContent(updateFunction: () => void): void {
 		const contentElement = document.getElementById(this.contentElementId);
 		if (contentElement) {
@@ -68,16 +66,14 @@ export class ContentManager {
 		}
 	}
 
-	public updateContentVisibility(
+	public updateContentNavigationVisibility(
 		backwardElementId: string,
 		forwardElementId: string,
-		ctaButtonId: string,
-		tutNavId: string
+		ctaButtonId: string
 	): void {
 		const backwardElement = document.getElementById(backwardElementId);
 		const forwardElement = document.getElementById(forwardElementId);
 		const ctaButton = document.getElementById(ctaButtonId);
-		const tutNav = document.getElementById(tutNavId);
 
 		if (backwardElement) {
 			backwardElement.style.display = this.currentIndex > 0 ? "block" : "none";
@@ -92,9 +88,15 @@ export class ContentManager {
 			ctaButton.style.display =
 				this.currentIndex === this.contentItems.length - 1 ? "block" : "none";
 		}
+	}
 
+	public updatePartNavigationVisibility(tutNavId: string): void {
+		const tutNav = document.getElementById(tutNavId);
 		if (tutNav) {
-			tutNav.style.display = this.shouldTutNavShow ? "flex" : "none";
+			const isAtLastContent =
+				this.currentIndex === this.contentItems.length - 1;
+			tutNav.style.display =
+				this.shouldTutNavShow && isAtLastContent ? "flex" : "none";
 		}
 	}
 }

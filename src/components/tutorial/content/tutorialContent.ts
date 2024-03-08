@@ -1,4 +1,4 @@
-export { loadIntro } from "../intro";
+export { loadIntro } from "../../../tutorial/intro";
 export { loadPartOne } from "../tutorial/part1";
 export { loadPartTwo } from "../tutorial/part2";
 export { loadPartThree } from "../tutorial/part3";
