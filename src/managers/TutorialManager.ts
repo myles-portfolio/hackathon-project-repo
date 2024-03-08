@@ -26,6 +26,14 @@ export class TutorialManager {
 		return this.contentManager;
 	}
 
+	public getCurrentPartIndex(): number {
+		return this.currentPartIndex;
+	}
+
+	public getTutorialParts(): TutorialPart[] {
+		return this.tutorialParts;
+	}
+
 	private setContentManager() {
 		const currentPart = this.getCurrentPart();
 		this.contentManager = new ContentManager(

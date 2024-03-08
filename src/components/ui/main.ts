@@ -63,8 +63,6 @@ function setupTutorialPartContentEventListeners(
 		if (shouldGoToNext) {
 			tutorialManager.loadNext();
 		}
-		console.log("You clicked me!");
-		console.log("CurrentContentID:", currentContentId);
 	});
 }
 
@@ -111,26 +109,59 @@ export function initializeTutorialPartContent(
 function setupTutorialPartFooterEventListeners(
 	tutorialManager: TutorialManager
 ) {
-	document
-		.getElementById("next")
-		?.addEventListener("click", () => tutorialManager.loadNext());
-	document
-		.getElementById("prev")
-		?.addEventListener("click", () => tutorialManager.loadPrev());
+	const prevButton = document.getElementById("prev");
+	const nextButton = document.getElementById("next");
+
+	const hasPrevPart = tutorialManager.getCurrentPartIndex() > 0;
+	const hasNextPart =
+		tutorialManager.getCurrentPartIndex() <
+		tutorialManager.getTutorialParts().length - 1;
+
+	if (prevButton) {
+		prevButton.style.display = hasPrevPart ? "block" : "none";
+		prevButton.addEventListener("click", () => {
+			if (hasPrevPart) tutorialManager.loadPrev();
+		});
+	}
+
+	if (nextButton) {
+		nextButton.style.display = hasNextPart ? "block" : "none";
+		nextButton.addEventListener("click", () => {
+			if (hasNextPart) tutorialManager.loadNext();
+		});
+	}
 }
 
 export function initializeTutorialPartFooter(
 	tutorialManager: TutorialManager,
 	shouldTutNavShow: boolean
 ) {
+	const currentIndex = tutorialManager.getCurrentPartIndex();
+	const tutorialParts = tutorialManager.getTutorialParts();
+
+	const prevPartIndex = currentIndex - 1;
+	const nextPartIndex = currentIndex + 1;
+
+	const prevPart = prevPartIndex >= 0 ? tutorialParts[prevPartIndex] : null;
+	const nextPart =
+		nextPartIndex < tutorialParts.length ? tutorialParts[nextPartIndex] : null;
+
 	const tutNavDisplayStyle = shouldTutNavShow ? "flex" : "none";
 
 	document.querySelector("#tutorial-footer")!.innerHTML = `
 			<section id="bottom-section">
 					<div id="tut-nav" class="inline-flex gap-2" style="display: ${tutNavDisplayStyle};">
-							<button id="prev" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">Prev</button>    
-							<button id="next" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">Next</button>
-					</div>
+              ${
+								prevPart
+									? `<button id="prev" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">Back to ${prevPart.title}</button>`
+									: ""
+							}
+              ${
+								nextPart
+									? `<button id="next" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">Go to ${nextPart.title}</button>`
+									: ""
+							}
+        </div>
     </section>
 	`;
 
