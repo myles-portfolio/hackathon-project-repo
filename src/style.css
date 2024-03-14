@@ -91,6 +91,11 @@
 	text-align: center;
 }
 
+p,
+ul {
+	padding: 0.5rem 0 0.5rem 0;
+}
+
 h1 {
 	font-size: 3em;
 	font-weight: 600;
@@ -106,6 +111,12 @@ h3 {
 	font-size: 1.5em;
 	font-weight: 600;
 	color: #d63230;
+	padding-top: 0.5rem;
+}
+
+ul > li,
+ol > li {
+	padding-bottom: 1rem;
 }
 
 ul > li > ul {

@@ -1,3 +1,5 @@
+import "../../../style.css";
+
 interface IntroContent {
 	content: string;
 }
@@ -8,17 +10,17 @@ export const introContent: IntroContent[] = [
         <h2>
             Common Approaches to Software Development
         </h2>
-        <p class="py-2">
+        <p>
             Developing software is an art and science that involves various approaches, each with its strengths and optimal use cases. Let's take a look at three common approaches used solo developers and both small and large teams:
         </p>
-        <ul class="py-2">
-            <li class="py-2">
+        <ul>
+            <li>
                 <strong>Waterfall 🌊:</strong> Waterfall is the traditional phase-oriented methodology. It's like a step-by-step recipe where you complete one step before moving on to the next. Think of it as a waterfall flowing downstream, where each phase cascades into the next, from requirements to maintenance.
             </li>
-            <li class="py-2">
+            <li>
                 <strong>Agile 🌀:</strong> Agile is a flexible, practice-oriented approach. Picture a series of loops or cycles, where planning, development, and evaluation happen in quick, repetitive rounds. It's like preparing dishes in a professional kitchen—fast, adaptable, and customer-focused, with continuous tasting and improvement.
             </li>
-            <li class="py-2">
+            <li>
                 <strong>Extreme Programming (XP) ⚙️:</strong> XP is a subset of Agile that emphasizes technical best practices and high-quality results through a set of defined practices. Imagine a set of gears working together seamlessly or a team sport where close collaboration and quick passes lead to a score. It's all about constant communication, feedback, and refinement.
             </li>
         </ul>`,
@@ -31,7 +33,7 @@ export const introContent: IntroContent[] = [
         <p>
             The Waterfall methodology, one of the earliest software development methods, is a linear and sequential approach where each phase of the development process flows steadily downwards, like a waterfall, through the phases of conception, initiation, analysis, design, construction, testing, deployment, and maintenance.
         </p>
-        <h3 class="py-2">
+        <h3>
             Principles
         </h3>
         <ul>
@@ -45,7 +47,7 @@ export const introContent: IntroContent[] = [
             <strong>📝Documentation and Planning Emphasis:</strong> Detailed documentation is a cornerstone of the Waterfall methodology. Each phase is well-documented, providing a clear set of deliverables that guide the next phase. This rigorous documentation facilitates clear understanding and reference throughout the project lifecycle.
             </li>
         </ul>
-        <h3 class="py-2">
+        <h3>
             Characteristics
         </h3>
         <ul>
@@ -67,7 +69,7 @@ export const introContent: IntroContent[] = [
         <p>
             Agile methodology is a set of principles for software development under which requirements and solutions evolve through the collaborative effort of self-organizing and cross-functional teams. It advocates adaptive planning, evolutionary development, early delivery, and continual improvement, and it encourages flexible responses to change.
         </p>
-        <h3 class="py-2">
+        <h3>
             Principles
         </h3>
         <ul>
@@ -84,7 +86,7 @@ export const introContent: IntroContent[] = [
             <strong>🛞Responding to Change Over Following a Plan:</strong> Agile teams are expected to be responsive to change, even late in the development process. This flexibility ensures the product remains relevant and competitive in a changing market environment.
             </li>
         </ul>
-        <h3 class="py-2">
+        <h3>
             Characteristics
         </h3>
         <ul>
@@ -109,7 +111,7 @@ export const introContent: IntroContent[] = [
         <p>
             Extreme Programming (XP) is an agile software development framework that aims to produce higher quality software, and higher quality of life for the development team. XP is characterized by its short development cycles, incremental planning approach, continuous feedback, and—most notably—its emphasis on technical excellence and good design.
         </p>
-        <h3 class="py-2">
+        <h3>
             Principles
         </h3>
         <ul>
@@ -126,7 +128,7 @@ export const introContent: IntroContent[] = [
             <strong>🤝Team Empowerment:</strong> XP believes that every team member should have a voice in the development process. This empowerment encourages innovation and shared ownership of the project, leading to more creative solutions and a stronger, more cohesive team.
             </li>
         </ul>
-        <h3 class="py-2">
+        <h3>
             Characteristics
         </h3>
         <ul>
@@ -139,5 +141,83 @@ export const introContent: IntroContent[] = [
             <strong>3️⃣Adaptability to Change:</strong> XP is designed to accommodate changes in customer requirements, even late in the development cycle. This flexibility ensures the final product remains relevant and valuable to the customer.
             </li>
         </ul>`,
+	},
+	{
+		content: `
+        <h2>
+            So, what method is best for your project?
+        </h2>
+        <p>
+            The short answer is: <strong>it depends</strong>.
+        </p>
+        <div class="overflow-x-auto shadow-md sm:rounded-lg mb-10">
+            <table class="w-full text-sm text-left">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            <div class="flex items-center">
+                            🌊 Waterfall
+                            </div>
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            <div class="flex items-center">
+                                🌀 Agile
+                            </div>
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            <div class="flex items-center">
+                                ⚙️ XP
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="bg-white dark:bg-gray-800 dark:border-gray-700">
+                        <td class="px-6 py-4">
+                            Requirements are well-understood and unlikely to change.
+                        </td>
+                        <td class="px-6 py-4">
+                            Requirements are expected to change or are not fully understood at the outset.
+                        </td>
+                        <td class="px-6 py-4">
+                            The project scope is expected to change or is not fully defined at the outset.
+                        </td>
+                    </tr>
+                    <tr class="bg-white dark:bg-gray-800 dark:border-gray-700">
+                        <td class="px-6 py-4">
+                            The project scope is clear, and the product definition is stable.
+                        </td>
+                        <td class="px-6 py-4">
+                            The project benefits from frequent reviews and adaptations, allowing for rapid pivots based on user feedback or market trends.
+                        </td>
+                        <td class="px-6 py-4">
+                            The risk of technological change is high, and the project needs to adapt rapidly.
+                        </td>
+                    </tr>
+                    <tr class="bg-white dark:bg-gray-800">
+                        <td class="px-6 py-4">
+                            There is a need for strict regulatory documentation and compliance.
+                        </td>
+                        <td class="px-6 py-4">
+                            Innovation, speed, and flexibility are more critical than predictability and control.
+                        </td>
+                        <td class="px-6 py-4">
+                            There is a need for frequent delivery of functional software to accommodate fast-paced environments.
+                        </td>
+                    </tr>
+                    <tr class="bg-white dark:bg-gray-800">
+                        <td class="px-6 py-4">
+                            The technology being used is well-understood, and there are no exploratory elements involved.
+                        </td>
+                        <td class="px-6 py-4">
+                            The project environment supports collaboration and communication among cross-functional teams.
+                        </td>
+                        <td class="px-6 py-4">
+                            A high level of customer involvement is possible and desired to ensure the product meets real user needs.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+    </div>`,
 	},
 ];

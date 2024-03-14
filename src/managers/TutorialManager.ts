@@ -83,7 +83,7 @@ export class TutorialManager {
 		const currentPart = this.getCurrentPart();
 
 		if (currentPart && this.contentManager) {
-			initializeTutorialPartHeader(currentPart.shouldTutNavShow);
+			initializeTutorialPartHeader(currentPart);
 			initializeTutorialPartContent(
 				currentPart.id,
 				currentPart.content,

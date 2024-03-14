@@ -1,6 +1,10 @@
 import { TutorialManager } from "../../managers/TutorialManager";
 import { ContentManager } from "../../managers/ContentManager";
-import { ContentItem, tutorialParts } from "../tutorial/parts/tutorial-parts";
+import {
+	ContentItem,
+	TutorialPart,
+	tutorialParts,
+} from "../tutorial/parts/tutorial-parts";
 
 export function initializeTutorial() {
 	const tutorialManager = new TutorialManager(tutorialParts);
@@ -8,10 +12,8 @@ export function initializeTutorial() {
 	const currentPart = tutorialManager.getCurrentPart();
 	const contentManager = tutorialManager.getCurrentContentManager();
 
-	const shouldDisplayHeader = currentPart.id === "welcome";
-
 	if (contentManager) {
-		initializeTutorialPartHeader(shouldDisplayHeader);
+		initializeTutorialPartHeader(currentPart);
 		initializeTutorialPartContent(
 			currentPart.id,
 			currentPart.content,
@@ -27,23 +29,23 @@ export function initializeTutorial() {
 	}
 }
 
-export function initializeTutorialPartHeader(shouldDisplayHeader: boolean) {
+export function initializeTutorialPartHeader(currentPart: TutorialPart) {
 	const tutorialHeader = document.querySelector("#tutorial-header");
 	if (tutorialHeader) {
-		if (shouldDisplayHeader) {
-			tutorialHeader.innerHTML = `
-							<section id="top-section">
-									<h1 class="text-center">
-											Software Development <br>Lifecycle Tutorial
-									</h1>
-									<div class="w-124 mx-auto">
-											<img src="/website-interface.svg">
-									</div>
-							</section>
-					`;
-		} else {
-			tutorialHeader.innerHTML = "";
+		let headerContent = `<section id="top-section" class="mt-10">`;
+		if (currentPart.headerText) {
+			headerContent += `<h1 class="text-center">${currentPart.headerText}</h1>`;
 		}
+		if (currentPart.headerImage) {
+			headerContent += `
+        <div class="w-124 mx-auto">
+          <img src="${currentPart.headerImage}" alt="${currentPart.title}">
+        </div>
+      `;
+		}
+
+		headerContent += `</section>`;
+		tutorialHeader.innerHTML = headerContent;
 	}
 }
 
@@ -87,7 +89,7 @@ export function initializeTutorialPartContent(
 
 	document.querySelector("#tutorial-content")!.innerHTML = `
 		<section id="middle-section" class="flex flex-col justify-center items-center">
-				<div class="flex gap-4 items-center">
+				<div class="flex gap-4 items-center px-4">
 						<div id="backward" class="text-[32px] cursor-pointer text-baby-blue transition ease-in-out delay-50 hover:text-lapis-lazuli hover:-translate-y-1 hover:scale-110 duration-300">
 								<i class="fa-solid fa-chevron-left"></i>
 						</div>
@@ -149,7 +151,7 @@ export function initializeTutorialPartFooter(
 	const tutNavDisplayStyle = shouldTutNavShow ? "flex" : "none";
 
 	document.querySelector("#tutorial-footer")!.innerHTML = `
-			<section id="bottom-section">
+			<section id="bottom-section" class="flex justify-center class="mb-4">
 					<div id="tut-nav" class="inline-flex gap-2" style="display: ${tutNavDisplayStyle};">
               ${
 								prevPart
