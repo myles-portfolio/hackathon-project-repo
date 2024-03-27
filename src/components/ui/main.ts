@@ -6,26 +6,51 @@ import {
 	tutorialParts,
 } from "../tutorial/parts/tutorial-parts";
 
+export function loadProgress(
+	savedPartProgress: string,
+	savedContentProgress: string
+): void {
+	console.log("There is saved progress.");
+	console.log("Saved Part:", savedPartProgress);
+	console.log("Saved Content:", savedContentProgress);
+}
+
 export function initializeTutorial() {
 	const tutorialManager = new TutorialManager(tutorialParts);
 
 	const currentPart = tutorialManager.getCurrentPart();
 	const contentManager = tutorialManager.getCurrentContentManager();
 
-	if (contentManager) {
-		initializeTutorialPartHeader(currentPart);
-		initializeTutorialPartContent(
-			currentPart.id,
-			currentPart.content,
-			currentPart.contentClass,
-			currentPart.buttonText,
-			currentPart.shouldTutNavShow,
-			tutorialManager,
-			contentManager
-		);
-		initializeTutorialPartFooter(tutorialManager, currentPart.shouldTutNavShow);
+	const savedPartProgress = localStorage.getItem("tutorialPartProgress");
+	const savedContentProgress = localStorage.getItem("contentPartProgress");
+
+	if (savedPartProgress && savedContentProgress) {
+		loadProgress(savedPartProgress, savedContentProgress);
+
+		const currentPartIndex = tutorialManager.getCurrentPartIndex();
+		const currentContentIndex = contentManager?.getCurrentContentIndex();
+
+		tutorialManager.navigateToPart(currentPartIndex);
+		contentManager?.setCurrentContent(currentContentIndex);
 	} else {
-		console.error("ContentManager is not initialized.");
+		if (contentManager) {
+			initializeTutorialPartHeader(currentPart);
+			initializeTutorialPartContent(
+				currentPart.id,
+				currentPart.content,
+				currentPart.contentClass,
+				currentPart.buttonText,
+				currentPart.shouldTutNavShow,
+				tutorialManager,
+				contentManager
+			);
+			initializeTutorialPartFooter(
+				tutorialManager,
+				currentPart.shouldTutNavShow
+			);
+		} else {
+			console.error("ContentManager is not initialized.");
+		}
 	}
 }
 
@@ -55,15 +80,15 @@ function setupTutorialPartContentEventListeners(
 ) {
 	document
 		.getElementById("backward")
-		?.addEventListener("click", () => contentManager?.goToPrevContent());
+		?.addEventListener("click", () => contentManager?.setPrevContent());
 	document
 		.getElementById("forward")
-		?.addEventListener("click", () => contentManager?.goToNextContent());
+		?.addEventListener("click", () => contentManager?.setNextContent());
 	document.getElementById("cta-button")?.addEventListener("click", () => {
 		const currentContentId = tutorialManager.getCurrentPart().id;
 		const shouldGoToNext = currentContentId === "welcome";
 		if (shouldGoToNext) {
-			tutorialManager.loadNext();
+			tutorialManager.navigateToPart("next");
 		}
 	});
 }
@@ -103,8 +128,7 @@ export function initializeTutorialPartContent(
 				${ctaButtonHtml}
 		</section>
     `;
-
-	contentManager.renderCurrentContent();
+	contentManager.setCurrentContent();
 	setupTutorialPartContentEventListeners(contentManager, tutorialManager);
 }
 
@@ -122,14 +146,14 @@ function setupTutorialPartFooterEventListeners(
 	if (prevButton) {
 		prevButton.style.display = hasPrevPart ? "block" : "none";
 		prevButton.addEventListener("click", () => {
-			if (hasPrevPart) tutorialManager.loadPrev();
+			if (hasPrevPart) tutorialManager.navigateToPart("prev");
 		});
 	}
 
 	if (nextButton) {
 		nextButton.style.display = hasNextPart ? "block" : "none";
 		nextButton.addEventListener("click", () => {
-			if (hasNextPart) tutorialManager.loadNext();
+			if (hasNextPart) tutorialManager.navigateToPart("next");
 		});
 	}
 }

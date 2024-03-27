@@ -34,52 +34,73 @@ export class TutorialManager {
 		return this.tutorialParts;
 	}
 
-	private setContentManager() {
-		const currentPart = this.getCurrentPart();
-		this.contentManager = new ContentManager(
-			currentPart.content,
-			currentPart.id,
-			currentPart.shouldTutNavShow
-		);
-
-		this.contentManager.renderCurrentContent();
-	}
-
-	public loadNext() {
-		if (this.currentPartIndex < this.tutorialParts.length - 1) {
-			this.currentPartIndex++;
-			this.updateTutorial();
-		}
-	}
-
-	public loadPrev() {
-		if (this.currentPartIndex > 0) {
-			this.currentPartIndex--;
-			this.updateTutorial();
-		}
-	}
-
-	public loadSpecific(index: number) {
+	public setCurrentPartIndex(index: number): void {
 		if (index >= 0 && index < this.tutorialParts.length) {
 			this.currentPartIndex = index;
+		} else {
+			console.warn("Attempted to set an invalid part index:", index);
+		}
+	}
+
+	private setContentManager(contentIndex?: number) {
+		const currentPart = this.getCurrentPart();
+		if (currentPart && currentPart.content) {
+			this.contentManager = new ContentManager(
+				currentPart.content,
+				currentPart.id,
+				currentPart.shouldTutNavShow,
+				contentIndex
+			);
+			if (contentIndex !== undefined) {
+				this.contentManager.setCurrentContentIndex(contentIndex);
+			}
+			this.contentManager.setCurrentContent();
+		} else {
+			console.error(
+				"setContentManager: currentPart or its content is undefined."
+			);
+		}
+	}
+
+	public navigateToPart(index: number | "next" | "prev"): void {
+		let newIndex: number | null = null;
+
+		if (
+			index === "next" &&
+			this.currentPartIndex < this.tutorialParts.length - 1
+		) {
+			newIndex = this.currentPartIndex + 1;
+		} else if (index === "prev" && this.currentPartIndex > 0) {
+			newIndex = this.currentPartIndex - 1;
+		} else if (
+			typeof index === "number" &&
+			index >= 0 &&
+			index < this.tutorialParts.length
+		) {
+			newIndex = index;
+		}
+
+		if (newIndex !== null) {
+			this.currentPartIndex = newIndex;
+			this.saveTutorialPartProgress();
 			this.updateTutorial();
 		}
 	}
 
 	private updateTutorial() {
 		this.setContentManager();
-		this.updateAppHeader();
-		this.updateAppContent();
-		this.updateButtonStates();
+		this.setAppHeader();
+		this.setAppContent();
+		this.setButtonStates();
 	}
 
-	private updateAppHeader() {
+	private setAppHeader() {
 		const currentPart = this.getCurrentPart();
 
 		initializeAppHeader(currentPart.title || "");
 	}
 
-	private updateAppContent() {
+	private setAppContent() {
 		const currentPart = this.getCurrentPart();
 
 		if (currentPart && this.contentManager) {
@@ -94,13 +115,11 @@ export class TutorialManager {
 				this.contentManager
 			);
 
-			this.contentManager.updateContent(currentPart.content);
-
 			initializeTutorialPartFooter(this, currentPart.shouldTutNavShow);
 		}
 	}
 
-	private updateButtonStates() {
+	private setButtonStates() {
 		const prevButton = document.getElementById(
 			"prev"
 		) as HTMLButtonElement | null;
@@ -115,5 +134,15 @@ export class TutorialManager {
 		if (this.contentManager) {
 			this.contentManager.updatePartNavigationVisibility("tut-nav");
 		}
+	}
+
+	private saveTutorialPartProgress() {
+		const partIndex = this.getCurrentPartIndex();
+
+		const progress = {
+			partIndex: partIndex,
+		};
+
+		localStorage.setItem("tutorialPartProgress", JSON.stringify(progress));
 	}
 }

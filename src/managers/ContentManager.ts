@@ -1,4 +1,5 @@
 import { ContentItem } from "../components/tutorial/parts/tutorial-parts";
+import { eventEmitter } from "../lib/EventEmitter";
 
 export class ContentManager {
 	private contentItems: ContentItem[];
@@ -9,46 +10,80 @@ export class ContentManager {
 	constructor(
 		contentItems: ContentItem[],
 		contentElementId: string,
-		shouldTutNavShow: boolean
+		shouldTutNavShow: boolean,
+		initialContentIndex: number = 0
 	) {
 		this.contentItems = contentItems;
 		this.contentElementId = contentElementId;
 		this.shouldTutNavShow = shouldTutNavShow;
-		this.renderCurrentContent();
+		this.currentIndex = initialContentIndex;
+		this.setCurrentContent();
 	}
 
-	public renderCurrentContent(): void {
-		const contentElement = document.getElementById(this.contentElementId);
+	public getCurrentContentIndex(): number {
+		return this.currentIndex;
+	}
 
-		if (contentElement && this.contentItems.length > 0) {
-			contentElement.innerHTML = this.contentItems[this.currentIndex].content;
+	public setCurrentContentIndex(index: number): void {
+		const savedProgress = localStorage.getItem("contentPartProgress");
+		if (savedProgress) {
+			const { contentIndex } = JSON.parse(savedProgress);
+			index = contentIndex;
 		}
-		this.updateContentNavigationVisibility("backward", "forward", "cta-button");
-		this.updatePartNavigationVisibility("tut-nav");
-	}
 
-	public goToNextContent(): void {
-		if (this.currentIndex < this.contentItems.length - 1) {
-			this.fadeContent(() => {
-				this.currentIndex++;
-				this.renderCurrentContent();
-			});
-		}
-	}
-
-	public goToPrevContent(): void {
-		if (this.currentIndex > 0) {
-			this.fadeContent(() => {
-				this.currentIndex--;
-				this.renderCurrentContent();
-			});
+		if (index >= 0 && index < this.contentItems.length) {
+			this.currentIndex = index;
+			this.setCurrentContent(this.currentIndex);
+		} else {
+			console.warn("Attempted to set an invalid content index:", index);
 		}
 	}
 
-	public updateContent(newContent: ContentItem[]): void {
-		this.contentItems = newContent;
-		this.currentIndex = 0;
-		this.renderCurrentContent();
+	public setCurrentContent(index?: number): void {
+		if (index !== undefined && index >= 0 && index < this.contentItems.length) {
+			this.currentIndex = index;
+		}
+
+		if (
+			this.currentIndex >= 0 &&
+			this.currentIndex < this.contentItems.length
+		) {
+			const contentElement = document.getElementById(this.contentElementId);
+			if (contentElement) {
+				this.fadeContent(() => {
+					contentElement.innerHTML =
+						this.contentItems[this.currentIndex].content;
+					this.updateContentNavigationVisibility(
+						"backward",
+						"forward",
+						"cta-button"
+					);
+					this.updatePartNavigationVisibility("tut-nav");
+				});
+			}
+			this.saveContentProgress(this.currentIndex);
+			eventEmitter.emit("contentChanged", this.getCurrentContentIndex());
+		} else {
+			console.error(
+				"ContentManager: Current index out of bounds or contentItems is empty."
+			);
+		}
+	}
+
+	public setNextContent(): void {
+		const newIndex = this.currentIndex + 1;
+		this.setCurrentContent(newIndex);
+		this.saveContentProgress(newIndex);
+		console.log(`Emitting contentChanged event with newIndex: ${newIndex}`);
+		eventEmitter.emit("contentChanged", newIndex);
+	}
+
+	public setPrevContent(): void {
+		const newIndex = this.currentIndex - 1;
+		this.setCurrentContent(newIndex);
+		this.saveContentProgress(newIndex);
+		console.log(`Emitting contentChanged event with newIndex: ${newIndex}`);
+		eventEmitter.emit("contentChanged", newIndex);
 	}
 
 	public isLastContent(): boolean {
@@ -97,6 +132,20 @@ export class ContentManager {
 				this.currentIndex === this.contentItems.length - 1;
 			tutNav.style.display =
 				this.shouldTutNavShow && isAtLastContent ? "flex" : "none";
+		}
+	}
+
+	public saveContentProgress(index: number) {
+		const progress = { contentIndex: index };
+		localStorage.setItem("contentPartProgress", JSON.stringify(progress));
+		console.log("Content progress saved:", progress);
+	}
+
+	public loadContentProgress(): void {
+		const savedProgress = localStorage.getItem("contentPartProgress");
+		if (savedProgress) {
+			const { contentIndex } = JSON.parse(savedProgress);
+			this.setCurrentContentIndex(contentIndex);
 		}
 	}
 }
