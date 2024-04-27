@@ -1,9 +1,20 @@
-import { TutorialManager } from "../managers/tutorial";
+import "./styles.css";
+
+import { TutorialManager } from "./managers/tutorial";
 
 const toggleTheme = () => {
 	const body = document.body;
 	body.classList.toggle("dark");
 };
+
+const subheaderElement = document.querySelector<HTMLDivElement>("#sub-header");
+if (subheaderElement) {
+	subheaderElement.innerHTML = `
+  <div class="flex justify-end px-8">
+    <button id="theme-toggle" class="bg-white hover:bg-baby-blue text-primary hover:text-gray-100 font-semibold py-2 px-4 my-4 border border-gray-400 rounded shadow hover:border-baby-blue w-fit transition ease-in-out duration-300">Toggle Theme</button>
+  </div>
+  `;
+}
 
 document.addEventListener("DOMContentLoaded", () => {
 	const tutorialManager = new TutorialManager();
@@ -68,3 +79,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	updateNavigationButtons();
 });
+
+const footerElement = document.querySelector("#footer");
+if (footerElement) {
+	footerElement.innerHTML = `
+    <div class="flex flex-col justify-center items-center">
+      <p>This is the footer.</p>
+    </div>
+    `;
+}
