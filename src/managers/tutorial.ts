@@ -19,7 +19,7 @@ export class TutorialManager {
 		const ctaButtonHtml = buttonText
 			? `
         <div>
-            <button id="custom-cta-button" class="bg-white hover:bg-baby-blue text-primary hover:text-gray-100 font-semibold py-2 px-4 my-4 border border-gray-400 rounded shadow hover:border-baby-blue w-fit transition ease-in-out duration-300">
+            <button id="custom-cta-button" class="bg-white hover:bg-baby-blue text-primary hover:text-gray-100 font-semibold py-2 px-4 my-4 border border-gray-400 rounded shadow hover:border-baby-blue w-fit transition ease-in-out duration-300 dark:bg-background dark:hover:text-baby-blue">
             ${buttonText}
             </button>
         </div>
